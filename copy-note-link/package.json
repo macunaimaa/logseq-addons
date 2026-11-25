@@ -1,0 +1,12 @@
+{
+  "name": "logseq-copy-note-link",
+  "version": "0.1.0",
+  "description": "Botão no topo do Logseq que copia o link/caminho da nota atual para usar como referência em agentes.",
+  "main": "index.html",
+  "license": "MIT",
+  "logseq": {
+    "id": "copy-note-link",
+    "title": "Copy Note Link",
+    "icon": "./icon.svg"
+  }
+}
