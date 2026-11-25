@@ -23,7 +23,8 @@ async function todayJournal() {
   const rows = await logseq.DB.datascriptQuery(
     `[:find (pull ?p [*]) :where [?p :block/journal-day ${day}]]`
   );
-  return rows?.[0]?.[0] ?? null;
+  const id = rows?.[0]?.[0]?.id;
+  return id ? logseq.Editor.getPage(id) : null;
 }
 
 async function resolveCurrentPage() {
