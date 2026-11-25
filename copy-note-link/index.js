@@ -17,9 +17,22 @@ const settingsSchema = [
   },
 ];
 
+async function todayJournal() {
+  const d = new Date();
+  const day = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  const rows = await logseq.DB.datascriptQuery(
+    `[:find (pull ?p [*]) :where [?p :block/journal-day ${day}]]`
+  );
+  return rows?.[0]?.[0] ?? null;
+}
+
 async function resolveCurrentPage() {
+  // Editing a block: use the page that block lives on.
+  const block = await logseq.Editor.getCurrentBlock();
+  if (block?.page?.id) return logseq.Editor.getPage(block.page.id);
   const current = await logseq.Editor.getCurrentPage();
-  if (!current) return null;
+  // Journals home view has no "current page": fall back to today's journal.
+  if (!current) return todayJournal();
   // Zoomed into a block: current is a block, walk to its page.
   if (current.page && !current.name) {
     return logseq.Editor.getPage(current.page.id);
